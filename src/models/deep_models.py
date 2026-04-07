@@ -136,6 +136,11 @@ class LSTMModel(BaseModel):
             from tensorflow.keras import layers, models
 
             seq_len = self.sequence_length
+            if len(input_shape) == 1 and input_shape[0] % seq_len != 0:
+                raise ValueError(
+                    f"Feature size {input_shape[0]} is not divisible by "
+                    f"sequence_length {seq_len}"
+                )
             n_features = input_shape[-1] if len(input_shape) > 1 else input_shape[0] // seq_len
             units = self.config.get("units", 128)
             dropout_rate = self.config.get("dropout_rate", 0.3)

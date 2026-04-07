@@ -12,6 +12,19 @@ import joblib
 
 from src.config import LOG_FORMAT, LOG_LEVEL
 
+# Landmark index constants
+WRIST_LANDMARK_INDEX = 0
+MIDDLE_FINGER_MCP_INDEX = 9
+
+# Finger joint triplets for angle computation (each tuple is (a, b, c) where b is the joint)
+FINGER_JOINT_TRIPLETS = [
+    (0, 1, 2), (1, 2, 3), (2, 3, 4),        # Thumb
+    (0, 5, 6), (5, 6, 7), (6, 7, 8),         # Index
+    (0, 9, 10), (9, 10, 11), (10, 11, 12),   # Middle
+    (0, 13, 14), (13, 14, 15), (14, 15, 16), # Ring
+    (0, 17, 18), (17, 18, 19), (18, 19, 20), # Pinky
+]
+
 
 def setup_logger(name: str, level: str = LOG_LEVEL) -> logging.Logger:
     """Set up a logger with the specified name and level."""
@@ -85,11 +98,11 @@ def normalize_landmarks(landmarks: np.ndarray) -> np.ndarray:
         landmarks = landmarks.reshape(21, 3)
 
     # Translate so wrist is at origin
-    wrist = landmarks[0].copy()
+    wrist = landmarks[WRIST_LANDMARK_INDEX].copy()
     normalized = landmarks - wrist
 
-    # Scale by the distance from wrist to middle finger MCP (landmark 9)
-    scale = np.linalg.norm(normalized[9])
+    # Scale by the distance from wrist to middle finger MCP
+    scale = np.linalg.norm(normalized[MIDDLE_FINGER_MCP_INDEX])
     if scale > 0:
         normalized = normalized / scale
 
@@ -125,17 +138,8 @@ def compute_hand_angles(landmarks: np.ndarray) -> np.ndarray:
     if landmarks.ndim == 1:
         landmarks = landmarks.reshape(21, 3)
 
-    # Finger joint triplets for angle computation
-    finger_joints = [
-        (0, 1, 2), (1, 2, 3), (2, 3, 4),      # Thumb
-        (0, 5, 6), (5, 6, 7), (6, 7, 8),       # Index
-        (0, 9, 10), (9, 10, 11), (10, 11, 12), # Middle
-        (0, 13, 14), (13, 14, 15), (14, 15, 16), # Ring
-        (0, 17, 18), (17, 18, 19), (18, 19, 20), # Pinky
-    ]
-
     angles = []
-    for a, b, c in finger_joints:
+    for a, b, c in FINGER_JOINT_TRIPLETS:
         v1 = landmarks[a] - landmarks[b]
         v2 = landmarks[c] - landmarks[b]
         cos_angle = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-8)

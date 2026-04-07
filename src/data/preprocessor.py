@@ -72,7 +72,7 @@ class DataPreprocessor:
         random_state = self.config["random_state"]
 
         assert abs(train_ratio + val_ratio + test_ratio - 1.0) < 1e-6, \
-            "Ratios must sum to 1.0"
+            f"Ratios must sum to 1.0, got {train_ratio + val_ratio + test_ratio:.4f}"
 
         X_train_val, X_test, y_train_val, y_test = train_test_split(
             X, y,
