@@ -1,0 +1,6 @@
+{
+  "random_forest": {"n_estimators": 200, "max_depth": null, "random_state": 42},
+  "svm": {"kernel": "rbf", "C": 10.0, "gamma": "scale", "probability": true},
+  "cnn": {"epochs": 50, "batch_size": 32, "learning_rate": 0.001},
+  "lstm": {"epochs": 50, "batch_size": 32, "learning_rate": 0.001, "units": 128}
+}

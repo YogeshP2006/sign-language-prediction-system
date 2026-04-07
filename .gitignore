@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Data files (large)
+data/raw/gestures/**/*.csv
+data/processed/*.pkl
+data/processed/*.npy
+*.h5
+*.pkl
+!data/.gitkeep
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model files
+models/trained_models/*.pkl
+models/trained_models/*.h5
+!models/trained_models/.gitkeep
+!models/model_configs/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
